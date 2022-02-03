@@ -3,35 +3,31 @@ template <typename DATA>
 class BIT
 {
 private:
-    int m_tree_size;
-    vector<DATA> m_tree;
+    int tree_size;
+    vector<DATA> tree;
 
 public:
-    BIT(int n, const vector<DATA> &initial)
-        : m_tree_size{n}
+    BIT(int n) : tree_size{n}
     {
-        m_tree.resize(m_tree_size);
-        for (int i = 0; i < n; ++i)
-        {
-            this->updateNode(i, initial[i]);
-        }
+        tree.resize(n);
     }
 
     void updateNode(int i, DATA value)
     {
-        while (i < m_tree_size)
+        while (i < tree_size)
         {
-            m_tree[i] += value;
+            tree[i] += value;
             i |= (i + 1);
         }
     }
 
+    // ! Inclusive Prefix
     DATA queryPrefix(int r)
     {
         DATA sum{};
         while (r >= 0)
         {
-            sum += m_tree[r];
+            sum += tree[r];
             r = (r & (r + 1)) - 1;
         }
         return sum;

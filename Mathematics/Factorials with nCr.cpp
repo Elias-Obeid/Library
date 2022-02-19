@@ -179,7 +179,7 @@ struct _m_int
 				result *= a;
 			}
 
-			p /= 1;
+			p /= 2;
 
 			if (p > 0)
 			{

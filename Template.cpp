@@ -14,8 +14,6 @@ void setO(string name)
 
 #define IOS ios::sync_with_stdio(false), cin.tie(NULL)
 
-#define ff first
-#define ss second
 #define ef emplace_front
 #define eb emplace_back
 #define all(v) v.begin(), v.end()
@@ -26,8 +24,9 @@ typedef long double ld;
 
 const ld EPS = 1e-9;
 const ld PIE = asin(1) * 2;
-const ll MAX = 100'000 + 1;
-const ll INF = 1'000'000'000LL * 1'000'000'000;
+
+const ll MAX = 100'000;
+const ll INF = 1'000'000'000LL * 2;
 
 // const int MOD = 998'244'353;
 const int MOD = 1'000'000'007;

@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 
 struct Segment
 {
@@ -106,8 +104,3 @@ public:
         updateNode(pos, new_val, 1, 0, tree_n - 1);
     }
 };
-
-int main()
-{
-    return 0;
-}

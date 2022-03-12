@@ -98,9 +98,31 @@ public:
         return queryRange(l, r, 1, 0, tree_n - 1);
     }
 
+    Segment queryFull()
+    {
+        return tree[1];
+    }
+
     // ! 0 indexing
     void updateNode(int pos, const Segment &new_val)
     {
         updateNode(pos, new_val, 1, 0, tree_n - 1);
+    }
+
+    void debugTree()
+    {
+        for (int i = 1; i < 2 * tree_n; ++i)
+        {
+            cerr << tree[i].sum << " " << lazy[i].to_add << " : ";
+            if ((i & (i + 1)) == 0)
+            {
+                cerr << "\n";
+            }
+            else
+            {
+                cerr << " ";
+            }
+        }
+        cerr << "\n";
     }
 };

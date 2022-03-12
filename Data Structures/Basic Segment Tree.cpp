@@ -113,7 +113,7 @@ public:
     {
         for (int i = 1; i < 2 * tree_n; ++i)
         {
-            cerr << tree[i].sum << " " << lazy[i].to_add << " : ";
+            cerr << tree[i].sum;
             if ((i & (i + 1)) == 0)
             {
                 cerr << "\n";

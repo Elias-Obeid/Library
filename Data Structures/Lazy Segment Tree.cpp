@@ -1,4 +1,5 @@
-
+#include <bits/stdc++.h>
+using namespace std;
 struct SegmentChange
 {
     static const int BASE = numeric_limits<int>::lowest();
@@ -21,13 +22,16 @@ struct SegmentChange
         return to_add != 0 || hasSet();
     }
 
-    SegmentChange combineChanges(const SegmentChange &other) const
+    void combineChanges(const SegmentChange &other)
     {
         if (other.hasSet())
         {
-            return other;
+            *this = other;
         }
-        return SegmentChange(to_add + other.to_add, to_set);
+        else
+        {
+            to_add += other.to_add;
+        }
     }
 };
 
@@ -84,93 +88,103 @@ private:
         lazy.resize(2 * tree_n, SegmentChange{});
     }
 
-    void applyAndCombine(int node, int low, int high, const SegmentChange &change)
-    {
-        tree[node].pushChange(change, low, high);
-        if (node < tree_n)
-        {
-            lazy[node] = lazy[node].combineChanges(change);
-        }
-    }
-
     void pushUpdates(int node, int low, int high)
     {
         if (lazy[node].hasChange())
         {
-            int mid = (low + high) / 2;
-            applyAndCombine(2 * node, low, mid, lazy[node]);
-            applyAndCombine(2 * node + 1, mid + 1, high, lazy[node]);
-
+            if (low != high)
+            {
+                lazy[node * 2 + 0].combineChanges(lazy[node]);
+                lazy[node * 2 + 1].combineChanges(lazy[node]);
+            }
+            tree[node].pushChange(lazy[node], low, high);
             lazy[node] = SegmentChange{};
         }
     }
 
     Segment queryRange(int l, int r, int node, int low, int high)
     {
+        pushUpdates(node, low, high);
         if (r < low || high < l)
         {
             return Segment{};
         }
-
-        if (l <= low && high <= r)
+        else if (l <= low && high <= r)
         {
             return tree[node];
         }
-        pushUpdates(node, low, high);
+        else
+        {
+            Segment answer{};
+            int mid = (low + high) / 2;
 
-        int mid = (low + high) / 2;
-
-        Segment answer{};
-        answer.combineSegments(queryRange(l, r, node * 2, low, mid));
-        answer.combineSegments(queryRange(l, r, node * 2 + 1, mid + 1, high));
-        return answer;
+            answer.combineSegments(queryRange(l, r, node * 2, low, mid));
+            answer.combineSegments(queryRange(l, r, node * 2 + 1, mid + 1, high));
+            return answer;
+        }
     }
 
     Segment queryNode(int pos, int node, int low, int high)
     {
         pushUpdates(node, low, high);
-        if (low == high)
+        if (low == high && pos == low)
         {
             return tree[node];
         }
-
-        int mid = (low + high) / 2;
-        if (pos <= mid)
-        {
-            return queryNode(pos, node * 2, low, mid);
-        }
         else
         {
-            return queryNode(pos, node * 2 + 1, mid + 1, high);
+            int mid = (low + high) / 2;
+            if (pos <= mid)
+            {
+                return queryNode(pos, node * 2, low, mid);
+            }
+            else
+            {
+                return queryNode(pos, node * 2 + 1, mid + 1, high);
+            }
         }
     }
 
     void updateRange(int l, int r, const SegmentChange &change, int node, int low, int high)
     {
         pushUpdates(node, low, high);
-        if (low == high)
+        if (r < low || high < l)
         {
             return;
         }
-        else if (r < low || high < l)
+        else if (l <= low && high <= r)
         {
-            return;
+            lazy[node].combineChanges(change);
+            pushUpdates(node, low, high);
         }
-
-        int mid = (low + high) / 2;
-        updateRange(l, r, change, node * 2, low, mid);
-        updateRange(l, r, change, node * 2 + 1, mid + 1, high);
+        else
+        {
+            int mid = (low + high) / 2;
+            updateRange(l, r, change, node * 2, low, mid);
+            updateRange(l, r, change, node * 2 + 1, mid + 1, high);
+            tree[node].combineChildren(tree[node * 2], tree[node * 2 + 1]);
+        }
     }
 
     void updateNode(int pos, const Segment &new_val, int node, int low, int high)
     {
-        pos += tree_n;
-        tree[pos] = new_val;
-
-        while (pos > 0)
+        pushUpdates(node, low, high);
+        if (low == high && pos == low)
         {
-            pos /= 2;
-            tree[pos].combineChildren(tree[pos * 2], tree[pos * 2 + 1]);
+            tree[node] = new_val;
+        }
+        else
+        {
+            int mid = (low + high) / 2;
+            if (pos <= mid)
+            {
+                updateNode(pos, new_val, node * 2, low, mid);
+            }
+            else
+            {
+                updateNode(pos, new_val, node * 2 + 1, mid + 1, high);
+            }
+            tree[node].combineChildren(tree[node * 2], tree[node * 2 + 1]);
         }
     }
 
@@ -221,7 +235,6 @@ public:
     {
         for (int i = 1; i < 2 * tree_n; ++i)
         {
-            cerr << tree[i].sum << " " << lazy[i].to_add << " : ";
             if ((i & (i + 1)) == 0)
             {
                 cerr << "\n";

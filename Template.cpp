@@ -12,13 +12,6 @@ void setO(string name)
     freopen((name + ".out").c_str(), "w", stdout);
 }
 
-#define IOS ios::sync_with_stdio(false), cin.tie(NULL)
-
-#define ef emplace_front
-#define eb emplace_back
-#define all(v) v.begin(), v.end()
-#define rall(v) v.rbegin(), v.rend()
-
 typedef long long ll;
 typedef long double ld;
 
@@ -39,7 +32,9 @@ void solve_test_case()
 
 int main()
 {
-    IOS;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
     // setI("");
     // setO("");

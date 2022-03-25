@@ -204,14 +204,14 @@ using mod_int = _m_int<MOD>;
 vector<mod_int> fact;
 vector<mod_int> inv_fact;
 
-void preComputeFactorials()
+void preComputeFactorials(const int A = MAX)
 {
-	fact.resize(MAX);
-	inv_fact.resize(MAX);
+	fact.resize(A + 1);
+	inv_fact.resize(A + 1);
 
-	fact.assign(MAX, 1);
-	inv_fact.assign(MAX, 1);
-	for (int i = 1; i < MAX; ++i)
+	fact.assign(A + 1, 1);
+	inv_fact.assign(A + 1, 1);
+	for (int i = 1; i <= A + 1; ++i)
 	{
 		fact[i] = fact[i - 1] * i;
 		inv_fact[i] = 1 / fact[i];
@@ -220,7 +220,7 @@ void preComputeFactorials()
 
 mod_int NCR(int N, int R)
 {
-	if (int(fact.size()) < MAX)
+	if (fact.empty())
 	{
 		preComputeFactorials();
 	}
@@ -234,7 +234,7 @@ mod_int NCR(int N, int R)
 
 mod_int PNR(int N, int R)
 {
-	if (int(fact.size()) < MAX)
+	if (fact.empty())
 	{
 		preComputeFactorials();
 	}

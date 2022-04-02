@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 
 template <typename T>
 void compress(vector<T> &A)
@@ -10,7 +8,7 @@ void compress(vector<T> &A)
     {
         coordinates.emplace_back(A[i], i);
     }
-    sort(A.begin(), A.end());
+    sort(coordinates.begin(), coordinates.end());
 
     A[coordinates.front().second] = 1;
     for (int i = 1; i < N; ++i)

@@ -1,5 +1,4 @@
-#include <bits/stdc++.h>
-using namespace std;
+
 struct SegmentChange
 {
     static const int BASE = numeric_limits<int>::lowest();

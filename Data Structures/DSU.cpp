@@ -1,30 +1,17 @@
 
-template <typename DATA>
-class DSU
+struct DSU
 {
-private:
 	int connected;
-	vector<DATA> parent, component_size;
+	vector<int> parent, comp_size;
 
-public:
-	DSU(int n)
+	DSU(int n) : connected{n}, parent(n), comp_size(n, 1)
 	{
-		this->initializeDSU(n);
+		iota(parent.begin(), parent.end(), 0);
 	}
 
-	void initializeDSU(int n)
+	int getPar(int u)
 	{
-		parent = component_size = vector<DATA>(n + 1, 0);
-		for (int i = 1; i <= n; i++)
-		{
-			parent[i] = i, component_size[i] = 1;
-		}
-		connected = n;
-	}
-
-	int getParent(int u)
-	{
-		while (u != parent[u])
+		while (parent[u] != u)
 		{
 			parent[u] = parent[parent[u]];
 			u = parent[u];
@@ -32,29 +19,29 @@ public:
 		return u;
 	}
 
-	int getSize(int u)
+	bool sameComp(int u, int v)
 	{
-		return component_size[getParent(u)];
+		return getPar(u) == getPar(v);
 	}
 
-	bool uniteNodes(int u, int v)
+	bool mergeNodes(int u, int v)
 	{
-		int par1 = getParent(u), par2 = getParent(v);
-		if (par1 == par2)
+		u = getPar(u);
+		v = getPar(v);
+
+		if (u == v)
 		{
 			return false;
 		}
 
-		if (component_size[par1] > component_size[par2])
+		if (comp_size[u] < comp_size[v])
 		{
-			swap(par1, par2);
+			swap(u, v);
 		}
-
-		component_size[par2] += component_size[par1];
-		component_size[par1] = 0;
-
-		connected--;
-		parent[par1] = parent[par2];
+		comp_size[u] += comp_size[v];
+		comp_size[v] = 0;
+		parent[v] = u;
+		--connected;
 		return true;
 	}
 };

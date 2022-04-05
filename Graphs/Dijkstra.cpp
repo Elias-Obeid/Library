@@ -1,56 +1,31 @@
 
-struct Edge
+const int N = 100'000;
+vector<vector<pair<int, int>>> adj(N);
+
+vector<int> dijkstra(int source, int n)
 {
-	int v, w, i;
-	Edge(int _v, int _w, int _i)
+	vector<int> dist(n, INF);
+	priority_queue<pair<int, int>,
+				   vector<pair<int, int>>,
+				   greater<pair<int, int>>>
+		current_paths;
+
+	dist[source] = 0;
+	current_paths.emplace(0, source);
+
+	while (!current_paths.empty())
 	{
-		v = _v;
-		w = _w;
-		i = _i;
-	}
-};
+		int u = current_paths.top().second;
+		current_paths.pop();
 
-vector<ll> dist;
-vector<int> prev_edge;
-vector<vector<Edge>> adj;
-
-void dijkstra_check(priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> &pq, int u, int i, ll d)
-{
-	if (d < dist[u])
-	{
-		dist[u] = d;
-		prev_edge[u] = i;
-		pq.push({d, u});
-	}
-}
-
-void dijkstra(int s)
-{
-	dist.assign(n, INF);
-	prev_edge.assign(n, -1);
-	priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> pq;
-	dijkstra_check(pq, s, -1, 0);
-
-	while (!pq.empty())
-	{
-		auto [d, u] = pq.top();
-		pq.pop();
-
-		if (d > dist[u])
+		for (auto &[v, w] : adj[u])
 		{
-			continue;
-		}
-
-		for (auto [v, w, i] : adj[u])
-		{
-			dijkstra_check(pq, v, i, d + w);
+			if (dist[v] > dist[u] + w)
+			{
+				dist[v] = dist[u] + w;
+				current_paths.emplace(dist[v], v);
+			}
 		}
 	}
-}
-
-void cleanUp()
-{
-	adj.clear();
-	dist.clear();
-	prev_edge.clear();
+	return dist;
 }

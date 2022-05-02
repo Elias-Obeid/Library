@@ -63,13 +63,22 @@ private:
 
     void updateNode(int pos, const Segment &new_val, int node, int low, int high)
     {
-        pos += tree_n;
-        tree[pos] = new_val;
-
-        while (pos > 0)
+        if (low == high)
         {
-            pos /= 2;
-            tree[pos].combineChildren(tree[pos * 2], tree[pos * 2 + 1]);
+            tree[node] = new_val;
+        }
+        else
+        {
+            int mid = (low + high) / 2;
+            if (pos <= mid)
+            {
+                updateNode(pos, new_val, node * 2, low, mid);
+            }
+            else
+            {
+                updateNode(pos, new_val, node * 2 + 1, mid + 1, high);
+            }
+            tree[node].combineChildren(tree[node * 2], tree[node * 2 + 1]);
         }
     }
 

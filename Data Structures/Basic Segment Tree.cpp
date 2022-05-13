@@ -122,7 +122,7 @@ public:
     {
         for (int i = 1; i < 2 * tree_n; ++i)
         {
-            cerr << tree[i].sum;
+            cerr << tree[i].maximum;
             if ((i & (i + 1)) == 0)
             {
                 cerr << "\n";

@@ -32,4 +32,9 @@ public:
         }
         return sum;
     }
+
+    DATA queryRange(int L, int R)
+    {
+        return queryPrefix(R) - queryPrefix(L - 1);
+    }
 };

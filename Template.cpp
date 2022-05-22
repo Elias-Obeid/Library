@@ -11,15 +11,9 @@ void setO(string name)
     freopen((name + ".out").c_str(), "w", stdout);
 }
 
-typedef long long ll;
-typedef long double ld;
-
-const ld EPS = 1e-9;
-const ld PIE = asin(1) * 2;
-const ll INF = 1'000'000'000LL * 2;
-
 // const int MOD = 998'244'353;
 const int MOD = 1'000'000'007;
+const long long INF = 1'000'000'000 * 2;
 
 void solveTestCase()
 {
@@ -41,7 +35,6 @@ int main()
 
     for (int test_case_number = 1; test_case_number <= number_of_test_cases; ++test_case_number)
     {
-        // cout << "Case : #" << test_case_number << "\n";
         solveTestCase();
     }
     return 0;

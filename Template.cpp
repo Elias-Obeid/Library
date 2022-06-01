@@ -13,7 +13,7 @@ void setO(string name)
 
 // const int MOD = 998'244'353;
 const int MOD = 1'000'000'007;
-const long long INF = 1'000'000'000 * 2;
+const long long INF = 1'000'000'000LL * 2;
 
 void solveTestCase()
 {
@@ -25,7 +25,6 @@ int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
 
     // setI("");
     // setO("");

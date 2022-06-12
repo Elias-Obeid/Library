@@ -1,47 +1,48 @@
 
 struct DSU
 {
-	int connected;
+	int N;
+	int component_count;
 	vector<int> parent, comp_size;
 
-	DSU(int n) : connected{n}, parent(n), comp_size(n, 1)
+	DSU(int n) : N{n}, component_count{n}, parent(n), comp_size(n, 1)
 	{
 		iota(parent.begin(), parent.end(), 0);
 	}
 
-	int getPar(int u)
+	int getParent(int U)
 	{
-		while (parent[u] != u)
+		while (parent[U] != U)
 		{
-			parent[u] = parent[parent[u]];
-			u = parent[u];
+			parent[U] = parent[parent[U]];
+			U = parent[U];
 		}
-		return u;
+		return U;
 	}
 
-	bool sameComp(int u, int v)
+	bool sameComp(int U, int V)
 	{
-		return getPar(u) == getPar(v);
+		return getParent(U) == getParent(V);
 	}
 
-	bool mergeNodes(int u, int v)
+	bool mergeNodes(int U, int V)
 	{
-		u = getPar(u);
-		v = getPar(v);
+		U = getParent(U);
+		V = getParent(V);
 
-		if (u == v)
+		if (U == V)
 		{
 			return false;
 		}
 
-		if (comp_size[u] < comp_size[v])
+		if (comp_size[U] < comp_size[V])
 		{
-			swap(u, v);
+			swap(U, V);
 		}
-		comp_size[u] += comp_size[v];
-		comp_size[v] = 0;
-		parent[v] = u;
-		--connected;
+		comp_size[U] += comp_size[V];
+		--component_count;
+		comp_size[V] = 0;
+		parent[V] = U;
 		return true;
 	}
 };

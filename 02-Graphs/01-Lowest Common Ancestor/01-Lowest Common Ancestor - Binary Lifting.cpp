@@ -18,7 +18,7 @@ private:
         return (time_in[U] <= time_in[V] && time_out[U] >= time_out[V]);
     }
 
-    void DFS(int U, int P, int D, int &timer)
+    void DFS(int U, int P, int &timer)
     {
         depth[U] = (P == U ? 0 : depth[P] + 1);
         parent[U][0] = P;
@@ -32,7 +32,7 @@ private:
         {
             if (V != P)
             {
-                DFS(V, U, D + 1, timer);
+                DFS(V, U, timer);
             }
         }
         time_out[U] = ++timer;
@@ -55,7 +55,7 @@ public:
     void buildLCA(int root = 0)
     {
         int timer = 0;
-        DFS(root, root, 0, timer);
+        DFS(root, root, timer);
     }
 
     int getLCA(int U, int V)
@@ -97,6 +97,16 @@ public:
             }
         }
         return (K == 0 ? U : -2);
+    }
+
+    int getDistance(int U, int V)
+    {
+        return depth[U] + depth[V] - 2 * depth[getLCA(U, V)];
+    }
+
+    bool onPath(int U, int V, int K)
+    {
+        return ((isAncestor(U, K) && isAncestor(K, V)) || (isAncestor(V, K) && isAncestor(K, U)));
     }
 };
 
